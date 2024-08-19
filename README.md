@@ -9,7 +9,7 @@ This library provides two main functions, `BudPayCheckout` and `BudPayCheckoutWi
 To use the BudPay Checkout library, you need to include the BudPay script in your HTML file. Attach the following script link at the end of the `<body>` tag in your HTML file:
 
 ```html
-<script src="https://cdn.budpay.com/js/budpay-checkout.js"></script>
+<script src="https://budpay-inline-js-v2.vercel.app/v2/inline.js"></script>
 ```
 
 
@@ -36,7 +36,7 @@ Here’s how you can use the `BudPayCheckout` function with a button to trigger 
         <!-- Button to trigger the payment modal -->
         <button id="payWithBudPay">Pay with BudPay</button>
 
-        <script src="https://cdn.budpay.com/js/budpay-checkout.js"></script>
+        <script src="https://budpay-inline-js-v2.vercel.app/v2/inline.js"></script>
         <script>
             document.getElementById('payWithBudPay').addEventListener('click', function () {
                 BudPayCheckout({
@@ -142,7 +142,7 @@ Here’s how you can use the `BudPayCheckoutWithAccessCode` function with a butt
         <!-- Button to trigger the payment modal -->
         <button id="payWithBudPayAccessCode">Pay with BudPay</button>
 
-        <script src="https://cdn.budpay.com/js/budpay-checkout.js"></script>
+        <script src="https://budpay-inline-js-v2.vercel.app/v2/inline.js"></script>
         <script>
             document.getElementById('payWithBudPayAccessCode').addEventListener('click', function () {
                 BudPayCheckoutWithAccessCode({
