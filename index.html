@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="src/output.css" rel="stylesheet" />
+    <title>Pay with BudPay</title>
+</head>
+
+<body>
+    <main class="w-full min-h-screen bg-[#FFFFFF] flex justify-center items-center py-16">
+        <div class="w-[97%] md:w-[37%] mx-auto">
+            <div class="w-full border border-[#dbdcdf] rounded-md p-6">
+                <h4 class="font-semibold text-xl">Using `BudPayCheckout` Function</h4>
+                <p class="text-sm text-gray-500">BudPay Inline JS</p>
+
+                <div class="flex flex-col gap-y-4 mt-6">
+                    <div class="">
+                        <h4 class="text-sm tracking-tight lightGrey pb-2">Email Address</h4>
+                        <input id="email_address" type="email" placeholder="example@gmail.com"
+                            class="w-full bg-[#faf7fd] focus:bg-[#f8f4fc] border border-[#e4e4e4] focus:border-[#f2e4f8] rounded-sm px-4 py-3.5 text-sm outline-none">
+                    </div>
+
+                    <div class="">
+                        <h4 class="text-sm tracking-tight lightGrey pb-2">Amount</h4>
+                        <input id="amount" type="number" placeholder="0"
+                            class="w-full bg-[#faf7fd] focus:bg-[#f8f4fc] border border-[#e4e4e4] focus:border-[#f2e4f8] rounded-sm px-4 py-3.5 text-sm outline-none">
+                    </div>
+
+                    <div class="">
+                        <h4 class="text-sm tracking-tight lightGrey pb-2">First Name (optional)</h4>
+                        <input id="first_name" type="text" placeholder=""
+                            class="w-full bg-[#faf7fd] focus:bg-[#f8f4fc] border border-[#e4e4e4] focus:border-[#f2e4f8] rounded-sm px-4 py-3.5 text-sm outline-none">
+                    </div>
+
+                    <div class="">
+                        <h4 class="text-sm tracking-tight lightGrey pb-2">Last Name (optional)</h4>
+                        <input id="last_name" type="text" placeholder=""
+                            class="w-full bg-[#faf7fd] focus:bg-[#f8f4fc] border border-[#e4e4e4] focus:border-[#f2e4f8] rounded-sm px-4 py-3.5 text-sm outline-none">
+                    </div>
+
+
+                    <div class="">
+                        <h4 class="text-sm tracking-tight lightGrey pb-2">Phone Number (optional)</h4>
+                        <input id="phone_number" type="text" placeholder="2349023334340"
+                            class="w-full bg-[#faf7fd] focus:bg-[#f8f4fc] border border-[#e4e4e4] focus:border-[#f2e4f8] rounded-sm px-4 py-3.5 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button id="submitButton"
+                        class="w-full py-3.5 text-sm bg-[#272363] text-[#ffffff] rounded-sm">Proceed
+                        to Pay</button>
+                </div>
+            </div>
+
+            <div class="w-full border border-[#dbdcdf] rounded-md p-6 mt-16">
+                <h4 class="font-semibold text-xl">Using `BudPayCheckoutWithAccessCode` Function</h4>
+                <p class="text-sm text-gray-500">BudPay Inline JS</p>
+                <div class="mt-6">
+                    <button id="submitButtonWithAccessCode"
+                        class="w-full py-3.5 text-sm bg-[#272363] text-[#ffffff] rounded-sm">Proceed to Pay</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="v2/inline.js"></script>
+
+    <script>
+        const submitButton = document.querySelector('#submitButton');
+        function payWithBudPay() {
+            BudPayCheckout({
+                api_key: '',
+                amount: Number(document.querySelector('#amount').value),
+                currency: 'NGN',
+                reference: 'BUD_' + Date.now(),
+                customer: {
+                    email: document.querySelector('#email_address').value,
+                    first_name: document.querySelector('#first_name').value,
+                    last_name: document.querySelector('#last_name').value,
+                    phone: document.querySelector('#phone_number').value,
+                },
+                logo_url: "",
+                callback_url: 'https://google.com', // only required if you want to redirect the customer to a custom page on your website. Otherwise we will call the callback function
+                onComplete: function (response) {
+                    // this happens after the payment is completed successfully or failed
+                    // Response contains the transaction reference, status
+                    console.log('status', response.status, 'reference', response.reference);
+                },
+                onCancel: function (response) {
+                    // happens when the user closes the payment modal
+                    // Response contains the transaction reference, status
+                    console.log('status', response.status, 'reference', response.reference);
+                },
+                debug: true
+            });
+        }
+
+        submitButton.addEventListener('click', payWithBudPay);
+    </script>
+
+
+    <script>
+        const submitButtonWithAccessCode = document.querySelector('#submitButtonWithAccessCode');
+        function payWithBudPayWithAccessCode() {
+            BudPayCheckoutWithAccessCode({
+                reference: 'BUD_17240858856294571',
+                access_code: 'lkc3fim3eszx',
+                callback_url: 'https://youtube.com',
+                onComplete: function (response) {
+                    // this happens after the payment is completed successfully or failed
+                    // Response contains the transaction reference, status
+                    console.log('status', response.status, 'reference', response.reference);
+                },
+                debug: true,
+            });
+        }
+
+        submitButtonWithAccessCode.addEventListener('click', payWithBudPayWithAccessCode);
+    </script>
+</body>
+
+</html>
