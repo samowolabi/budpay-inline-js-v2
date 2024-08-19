@@ -1,0 +1,12 @@
+{
+  "name": "budpay-inline",
+  "version": "1.0.0",
+  "description": "This library provides two main functions, `BudPayCheckout` and `BudPayCheckoutWithAccessCode`, to easily integrate BudPay's payment checkout modal into your website or application.",
+  "main": "v2/inline.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
