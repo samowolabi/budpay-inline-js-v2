@@ -76,7 +76,7 @@ const BudPayCheckout = (configData) => {
             phone: configData?.phone || null,
             logo_url: configData?.logo_url || null,
             callback_url: configData?.callback_url || null,
-            reference: configData?.reference || 'BUD_' + Math.floor((Math.random() * 1000000000) + 1) + new Date().getMilliseconds() + new Date().getSeconds()
+            reference: configData?.reference || `${Math.floor((Math.random() * 1000000000) + 1)}${new Date().getMilliseconds()}${new Date().getSeconds()}`
         }
     }
 

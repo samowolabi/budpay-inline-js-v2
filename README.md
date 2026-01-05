@@ -60,7 +60,7 @@ Here’s how you can use the `BudPayCheckout` function with a button to trigger 
                         console.log('Payment cancelled, Reference:', data.reference) 
                     },
                     custom_fields: { custom_field_1: "value1", custom_field_2: "value2" },
-                    debug: true // Show the debug modal to help you pass the write configs
+                    debug: true // Show the debug modal to help you pass the right config
                 });
             });
         </script>
@@ -111,7 +111,7 @@ curl https://api.budpay.com/api/v2/transaction/initialize \
 
 #### Example cURL Response
 
-```html copy
+```json copy
 {
   "status": true,
   "message": "Authorization URL created",
@@ -155,7 +155,7 @@ Here’s how you can use the `BudPayCheckoutWithAccessCode` function with a butt
                     onCancel: function (response) {
                         console.log('Payment cancelled:', response);
                     },
-                    debug: true // Show the debug modal to help you pass the write configs
+                    debug: true // Show the debug modal to help you pass the right configs
                 });
             });
         </script>
@@ -170,8 +170,8 @@ Here’s how you can use the `BudPayCheckoutWithAccessCode` function with a butt
 
 | Parameter        | Type       | Required | Description                                               |
 |------------------|------------|----------|-----------------------------------------------------------|
-| **accessCode**   | `string`   | Yes      | Your BudPay access code.                                  |
-| **reference**    | `string`   | Yes      | Unique reference for the transaction.                     |
+| **accessCode**   | `string`   | Yes      | Your BudPay access code obtained from the BudPay API |
+| **reference**    | `string`   | Yes      | Your reference for the transaction, obtained from the BudPay API |
 | **callback_url** | `string`   | No       | URL to redirect to after payment.                         |
 | **onComplete**   | `function` | No       | Callback function to execute after payment is successful. |
 | **onCancel**     | `function` | No       | Callback function to execute after payment is cancelled.  |
@@ -179,5 +179,5 @@ Here’s how you can use the `BudPayCheckoutWithAccessCode` function with a butt
 
 
 ## Last Updated
-This documentation was last updated on August 19, 2024.
+This documentation was last updated on Septemeber 02, 2024.
 Version: 2.0.1

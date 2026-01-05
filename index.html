@@ -67,16 +67,16 @@
         </div>
     </main>
 
-    <script src="v2/inline.js"></script>
+    <script src="https://inlinepay.budpay.com/budpay-inline-custom.js"></script>
 
     <script>
         const submitButton = document.querySelector('#submitButton');
         function payWithBudPay() {
             BudPayCheckout({
-                api_key: '',
+                api_key: 'pk_test_zol5ogz0divyytrj7jp4htrpql191wjwenodak',
                 amount: Number(document.querySelector('#amount').value),
                 currency: 'NGN',
-                reference: 'BUD_' + Date.now(),
+                reference: `${Date.now()}`,
                 customer: {
                     email: document.querySelector('#email_address').value,
                     first_name: document.querySelector('#first_name').value,
@@ -107,11 +107,16 @@
         const submitButtonWithAccessCode = document.querySelector('#submitButtonWithAccessCode');
         function payWithBudPayWithAccessCode() {
             BudPayCheckoutWithAccessCode({
-                reference: 'BUD_17240858856294571',
-                access_code: 'lkc3fim3eszx',
-                callback_url: 'https://youtube.com',
+                reference: 'BUD_17246150529807168',
+                access_code: 'p2a2o7dlldn0',
+                callback_url: 'https://github.com',
                 onComplete: function (response) {
                     // this happens after the payment is completed successfully or failed
+                    // Response contains the transaction reference, status
+                    console.log('status', response.status, 'reference', response.reference);
+                },
+                onCancel: function (response) {
+                    // happens when the user closes the payment modal
                     // Response contains the transaction reference, status
                     console.log('status', response.status, 'reference', response.reference);
                 },

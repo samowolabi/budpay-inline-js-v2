@@ -5,8 +5,8 @@
 
 const BudPayCheckout = (config) => {
     const libraryConfig = {
-        checkoutUrl: "https://budpay-checkout.vercel.app",
-        checkoutSources: ["https://budpay-checkout.vercel.app", "https://budpay-inline-checkout-v2-main.budpay-cluster-prod.com"],
+        checkoutUrl: "https://checkout.budpay.com",
+        checkoutSources: ["https://checkout.budpay.com", "https://budpay-inline-checkout-v2-main.budpay-cluster-prod.com"],
     }
 
     /* 
@@ -119,7 +119,10 @@ const BudPayCheckout = (config) => {
     // Receive Data from Parent
     window.addEventListener('message', function (event) {
         try {
-            if (!event.data || !event.origin) { return }
+            let iframeSelector = document.querySelector('iframe#budpay-iframe-container');
+            if (!iframeSelector) { return }
+
+            if (!event.data || !event.origin || event.source !== iframeSelector?.contentWindow) { return }
 
             if (!libraryConfig.checkoutSources.includes(event.origin)) {
                 throw new Error("Invalid origin");
@@ -129,8 +132,6 @@ const BudPayCheckout = (config) => {
                 type: event.data?.type || '',
                 data: event.data?.data || {}
             };
-
-            let iframeSelector = document.querySelector('iframe#budpay-iframe-container');
 
             switch (eventData.type) {
                 case 'initiateTransaction':
@@ -146,7 +147,7 @@ const BudPayCheckout = (config) => {
                         key: config.api_key,
                         amount: config.amount.toString(),
                         currency: config.currency,
-                        reference: config.reference || 'BUD_' + Math.floor((Math.random() * 1000000000) + 1) + new Date().getMilliseconds() + new Date().getSeconds(),
+                        reference: config.reference || `${Math.floor((Math.random() * 1000000000) + 1)}${new Date().getMilliseconds()}${new Date().getSeconds()}`,
                         email: config.customer.email,
                         first_name: config.customer?.first_name || '',
                         last_name: config.customer?.last_name || '',
@@ -223,8 +224,8 @@ const BudPayCheckout = (config) => {
 
 const BudPayCheckoutWithAccessCode = (config) => {
     const libraryConfig = {
-        checkoutUrl: `https://budpay-checkout.vercel.app/pay/api?reference=${config?.reference || ''}`,
-        checkoutSources: ["https://budpay-checkout.vercel.app", "https://budpay-inline-checkout-v2-main.budpay-cluster-prod.com"],
+        checkoutUrl: `https://checkout.budpay.com/pay/api?reference=${config?.reference || ''}&budpay_library_integrated`,
+        checkoutSources: ["https://checkout.budpay.com", "https://budpay-checkout.vercel.app", "https://budpay-inline-checkout-v2-main.budpay-cluster-prod.com"],
     }
 
     const validateConfig = () => {
@@ -247,29 +248,6 @@ const BudPayCheckoutWithAccessCode = (config) => {
         }
 
         return errors;
-    }
-
-
-    // Create SVG Loader Function
-    const openSVGLoaderFuncBudPay = () => {
-        let svgLoaderDiv = document.createElement("div");
-        svgLoaderDiv.setAttribute("id", "budpay-svg-loader-container");
-        svgLoaderDiv.setAttribute("style", "position:fixed;top:0;left:0;z-index:99999999999999;border:none;pointer-events:none;width:100%;height:100%;background:rgba(0,0,0,0.65);display:flex;justify-content:center;align-items:center;");
-        svgLoaderDiv.innerHTML = `
-                        <svg version="1.1" id="L9" width="80" height="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                            <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="0.7s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
-                            </path>
-                        </svg>
-                    `;
-        document.body.appendChild(svgLoaderDiv);
-    }
-
-    // Remove SVG Loader Function
-    const removeSVGLoaderFuncBudPay = () => {
-        if (document.body.contains(document.getElementById('budpay-svg-loader-container'))) {
-            document.getElementById('budpay-svg-loader-container').remove();
-        }
     }
 
     // Create Debug Screen Overlay
@@ -310,7 +288,7 @@ const BudPayCheckoutWithAccessCode = (config) => {
     const openCheckoutModal = () => {
         let iframeDiv = document.createElement("iframe");
         iframeDiv.setAttribute("src", `${libraryConfig.checkoutUrl}`);
-        iframeDiv.setAttribute("id", "budpay-iframe-container");
+        iframeDiv.setAttribute("id", "budpay-iframe-access-code-container");
         iframeDiv.setAttribute("style", "position:fixed;top:0;left:0;z-index:99999999999999;border:none;opacity:0;pointer-events:none;width:100%;height:100%;");
         iframeDiv.setAttribute("allowTransparency", "true");
         iframeDiv.setAttribute("width", "100%");
@@ -323,7 +301,10 @@ const BudPayCheckoutWithAccessCode = (config) => {
     // Receive Data from Parent
     window.addEventListener('message', function (event) {
         try {
-            if (!event.data || !event.origin) { return }
+            let iframeSelector = document.querySelector('iframe#budpay-iframe-access-code-container');
+            if (!iframeSelector) { return }
+            
+            if (!event.data || !event.origin || event.source !== iframeSelector?.contentWindow) { return }
 
             if (!libraryConfig.checkoutSources.includes(event.origin)) {
                 throw new Error("Invalid origin");
@@ -336,11 +317,11 @@ const BudPayCheckoutWithAccessCode = (config) => {
 
             switch (eventData.type) {
                 case 'closeTransaction':
-                    closePaymentModalBudPay('iframe#budpay-iframe-container', eventData.data, config);
+                    closePaymentModalBudPay('iframe#budpay-iframe-access-code-container', eventData.data, config);
                     break;
 
                 case 'cancelTransaction':
-                    cancelPaymentModalBudPay('iframe#budpay-iframe-container', eventData.data, config);
+                    cancelPaymentModalBudPay('iframe#budpay-iframe-access-code-container', eventData.data, config);
                     break;
 
                 default:
